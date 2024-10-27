@@ -3,6 +3,10 @@ import openai
 from dotenv import load_dotenv
 import logging
 import time
+import http.client
+
+# Disable HTTP request logging
+http.client.HTTPConnection.debuglevel = 0
 
 # Set up logging
 logging.getLogger("urllib3").setLevel(logging.ERROR)
