@@ -27,13 +27,19 @@ openai.api_key = api_key
 def run_single_game(llm_client):
     """Runs a single instance of the game and outputs the session log and summary."""
     game = Game(llm_client)
+    print("\n--- Starting Single Game ---")
     session_log, summary = game.play()
     
-    # Print session log for the game
-    print("\n--- Single Game Session Log ---")
-    for log_entry in session_log:
-        print(log_entry)
+    # Print each question and response as they occur
+    for question, response in session_log:
+        print(f"Question: {question} - Host's response: {response}")
     
+    # Check the winning condition after the game completes
+    if summary["win"]:
+        print(f"\nThe guesser wins! The topic was: {summary['topic']}")
+    else:
+        print(f"\nThe guesser did not guess the topic correctly. The topic was: {summary['topic']}")
+
     # Print summary of the game
     print("\n--- Single Game Summary ---")
     for key, value in summary.items():
