@@ -15,14 +15,16 @@ class Host:
         Selects a random topic and retrieves its main characteristics 
         by prompting the LLM.
         """
+        # Higher temperature for topic generation to increase variety
         topic_prompt = "Think of one random living or non-living thing. Only respond with the name of the object or living thing."
-        topic = self.llm_client.generate_response(topic_prompt) or "unknown"
+        topic = self.llm_client.generate_response(topic_prompt, temperature=0.8) or "unknown"
         
+        # Higher temperature for characteristic generation to add more diverse attributes
         characteristic_prompt = (
             f"You chose '{topic}'. List key characteristics like if it is living, an animal, plant, "
             "edible, fruit, etc. Only provide characteristics in a list format."
         )
-        characteristics = self.llm_client.generate_response(characteristic_prompt) or "N/A"
+        characteristics = self.llm_client.generate_response(characteristic_prompt, temperature=0.7) or "N/A"
         
         return topic, characteristics
 
@@ -31,7 +33,6 @@ class Host:
         Processes each question from the Guesser and provides an answer 
         based on the topic's characteristics.
         """
-        # Reflect on topic and previously asked questions to generate an accurate response.
         reflection = f"The topic is '{self.topic}', with characteristics: {self.characteristics}. Think of other characteristics of the {self.topic}. The question asked is: '{question}'."
         previous_context = f"Previous questions and answers: {asked_questions}."
         cot_reasoning = (
