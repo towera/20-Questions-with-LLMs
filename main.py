@@ -1,14 +1,17 @@
+import os
 import openai
-import re
-import time
 import logging
+import time
+from dotenv import load_dotenv
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from game import Game  # Ensure Game and LLMClient are in the right path for imports
+from client import LLMClient
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 logger = logging.getLogger()
 
-# Initialize the OpenAI API Key
+# Load environment variables from a .env file if it exists
 load_dotenv()
 
 # Retrieve API key from environment variable
@@ -18,6 +21,7 @@ if not api_key:
     raise ValueError("API key not found! Please set your OpenAI API key in a .env file or as an environment variable.")
 
 openai.api_key = api_key
+
 def run_parallel_games(num_games, llm_client):
     """
     Runs multiple game instances in parallel using ThreadPoolExecutor.
@@ -40,5 +44,6 @@ def run_parallel_games(num_games, llm_client):
 
 
 # Example usage
-llm_client = LLMClient()
-run_parallel_games(5, llm_client)
+if __name__ == "__main__":
+    llm_client = LLMClient()
+    run_parallel_games(5, llm_client)
