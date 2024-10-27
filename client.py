@@ -1,43 +1,49 @@
 import os
-import openai
-from dotenv import load_dotenv
 import logging
+import httpx
 import time
-import http.client
+from dotenv import load_dotenv
 
-# Disable HTTP request logging
-http.client.HTTPConnection.debuglevel = 0
-
-# Set up logging
-logging.getLogger("urllib3").setLevel(logging.ERROR)
-logging.getLogger("openai").setLevel(logging.ERROR)
-logger = logging.getLogger(__name__)
+# Load environment variables from .env file
 load_dotenv()
 
+# Set up logging for httpx to suppress HTTP 200 logs
+httpx_logger = logging.getLogger("httpx")
+httpx_logger.setLevel(logging.WARNING)
+logger = logging.getLogger(__name__)
+
 class LLMClient:
-    def __init__(self, model="gpt-4o-mini"):
+    def __init__(self, model="gpt-3.5-turbo"):
         self.model = model
+        self.api_key = os.getenv("OPENAI_API_KEY")
         self.response_times = []
+        
+        if not self.api_key:
+            raise ValueError("OpenAI API key not found. Set it in the .env file.")
 
     def generate_response(self, prompt):
         start_time = time.time()
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json",
+        }
+        data = {
+            "model": self.model,
+            "messages": [{"role": "user", "content": prompt}],
+        }
         try:
-            # Send prompt to OpenAI's completion endpoint
-            response = openai.chat.completions.create(
-                model=self.model,
-                messages=[
-                    {"role": "system", "content": "You are a helpful assistant."},
-                    {"role": "user", "content": prompt}
-                ]
-            )
-            # Calculate and store response time
-            response_time = time.time() - start_time
-            self.response_times.append(response_time)
-            return response.choices[0].message.content.strip()
-
-        except openai.error.OpenAIError as e:
-            # Log detailed error
-            logger.error(f"OpenAI API Error: {e}")
+            with httpx.Client() as client:
+                response = client.post("https://api.openai.com/v1/chat/completions", json=data, headers=headers)
+                response.raise_for_status()  # Raise an error for non-200 responses
+                content = response.json()["choices"][0]["message"]["content"].strip()
+                
+                # Calculate and store response time
+                response_time = time.time() - start_time
+                self.response_times.append(response_time)
+                
+                return content
+        except httpx.HTTPStatusError as e:
+            logger.error(f"HTTP error occurred: {e}")
             return None
         except Exception as e:
             logger.error(f"Unexpected error: {e}")
