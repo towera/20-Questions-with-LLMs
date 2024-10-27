@@ -29,9 +29,6 @@ class Game:
             self.question_count += 1
             question, self.regeneration_count = self.guesser.ask_question(self.asked_questions, self.regeneration_count)
             answer = self.host.answer_question(question, self.asked_questions)
-            print(f"\nTurn {self.question_count}:")  # This should print each turn
-            print(f"Guesser asks: {question}")  # Print the question being asked
-            print(f"Host: {answer}")
             
             session_log.append(f"Question {self.question_count}: {question} - Answer: {answer}")
             self.asked_questions.append((question, answer))
