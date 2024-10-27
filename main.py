@@ -34,8 +34,6 @@ def run_parallel_games(num_games, llm_client):
         for game_count, future in enumerate(as_completed(futures), start=1):
             session_log, summary = future.result()
             print(f"\n--- Game {game_count} Session Log ---")
-            for log_entry in session_log:
-                print(log_entry)
             
             # Print the evaluation summary for each game directly
             print(f"\n--- Game {game_count} Summary ---")
