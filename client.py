@@ -5,6 +5,8 @@ import logging
 import time
 
 # Set up logging
+logging.getLogger("urllib3").setLevel(logging.ERROR)
+logging.getLogger("openai").setLevel(logging.ERROR)
 logger = logging.getLogger(__name__)
 load_dotenv()
 
