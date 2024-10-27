@@ -1,3 +1,9 @@
+import os
+import openai
+from dotenv import load_dotenv
+import logging
+import time  # If you're tracking response times
+
 class LLMClient:
     """
     LLMClient handles interactions with the OpenAI API, including logging response times 
