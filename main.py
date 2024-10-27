@@ -23,6 +23,7 @@ if not api_key:
 
 openai.api_key = api_key
 
+
 def run_parallel_games(num_games, llm_client):
     """
     Runs multiple game instances in parallel using ThreadPoolExecutor.
@@ -31,18 +32,25 @@ def run_parallel_games(num_games, llm_client):
     with ThreadPoolExecutor(max_workers=num_games) as executor:
         futures = [executor.submit(Game(llm_client).play) for _ in range(num_games)]
         
-        # Loop over completed futures
+        # Process each game's results as they complete
         for game_count, future in enumerate(as_completed(futures), start=1):
-            session_log, summary = future.result()
-            print(f"\n--- Game {game_count} Session Log ---")
-            
-            # Print the evaluation summary for each game directly
-            print(f"\n--- Game {game_count} Summary ---")
-            for key, value in summary.items():
-                print(f"{key}: {value}")
+            try:
+                session_log, summary = future.result()
+                
+                # Print session log for each game
+                print(f"\n--- Game {game_count} Session Log ---")
+                for log_entry in session_log:  # Each question-answer pair
+                    print(log_entry)
+                
+                # Print summary of the game
+                print(f"\n--- Game {game_count} Summary ---")
+                for key, value in summary.items():
+                    print(f"{key}: {value}")
+                
+            except Exception as e:
+                logger.error(f"Game {game_count} encountered an error: {e}")
 
-
-# Example usage
+#Run Game
 if __name__ == "__main__":
     llm_client = LLMClient()
     run_parallel_games(5, llm_client)
