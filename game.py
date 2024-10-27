@@ -27,9 +27,17 @@ class Game:
         self.success = False
         while self.question_count < 18 and not self.success:
             self.question_count += 1
+    
+            # Generate question and answer
             question, self.regeneration_count = self.guesser.ask_question(self.asked_questions, self.regeneration_count)
-            answer = self.host.answer_question(question, self.asked_questions)
+            if question is None:  # Skip if no valid question generated
+                continue
             
+            answer = self.host.answer_question(question, self.asked_questions)
+            if answer is None:  # Skip if no valid answer generated
+                continue
+            
+            # Log question and answer
             session_log.append(f"Question {self.question_count}: {question} - Answer: {answer}")
             self.asked_questions.append((question, answer))
             
@@ -37,12 +45,13 @@ class Game:
             if question.lower() in {f"is it an {self.host.topic.lower()}?", f"is it a {self.host.topic.lower()}?"}:
                 self.success = True
                 break
-
+    
         # If no success, enter final guessing phase
         if not self.success:
             self.final_guesses(session_log)
         
         return session_log, self.evaluation_summary()
+
 
     def final_guesses(self, session_log):
         """Allows the Guesser to make final guesses if the topic isn't identified within 18 questions."""
