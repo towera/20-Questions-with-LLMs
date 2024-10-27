@@ -85,7 +85,11 @@ def run_parallel_games(num_games, llm_client):
     Each game is played independently and outputs a session log and summary.
     """
     with ThreadPoolExecutor(max_workers=num_games) as executor:
-        futures = [executor.submit(Game(llm_client).play) for _ in range(num_games)]
+        futures = []
+        
+        for i in range(num_games):
+            print(f"Running game {i + 1} of {num_games}...")  # Print status for each game start
+            futures.append(executor.submit(Game(llm_client).play))
         
         # Process each game's results as they complete
         for game_count, future in enumerate(as_completed(futures), start=1):
