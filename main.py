@@ -4,7 +4,7 @@ import logging
 import time
 from dotenv import load_dotenv
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from game import Game  # Ensure Game and LLMClient are in the right path for imports
+from game import Game  # Ensure Game and LLMClient are in the correct path for imports
 from client import LLMClient
 import http.client
 
@@ -24,6 +24,22 @@ if not api_key:
 openai.api_key = api_key
 
 
+def run_single_game(llm_client):
+    """Runs a single instance of the game and outputs the session log and summary."""
+    game = Game(llm_client)
+    session_log, summary = game.play()
+    
+    # Print session log for the game
+    print("\n--- Single Game Session Log ---")
+    for log_entry in session_log:
+        print(log_entry)
+    
+    # Print summary of the game
+    print("\n--- Single Game Summary ---")
+    for key, value in summary.items():
+        print(f"{key}: {value}")
+
+
 def run_parallel_games(num_games, llm_client):
     """
     Runs multiple game instances in parallel using ThreadPoolExecutor.
@@ -39,7 +55,7 @@ def run_parallel_games(num_games, llm_client):
                 
                 # Print session log for each game
                 print(f"\n--- Game {game_count} Session Log ---")
-                for log_entry in session_log:  # Each question-answer pair
+                for log_entry in session_log:
                     print(log_entry)
                 
                 # Print summary of the game
@@ -50,7 +66,22 @@ def run_parallel_games(num_games, llm_client):
             except Exception as e:
                 httpx_logger.error(f"Game {game_count} encountered an error: {e}")
 
-#Run Game
+# Prompt user to decide between single or parallel games
 if __name__ == "__main__":
     llm_client = LLMClient()
-    run_parallel_games(5, llm_client)
+    
+    choice = input("Enter '1' to run a single game or '2' to run multiple games in parallel: ").strip()
+    
+    if choice == '1':
+        run_single_game(llm_client)
+    elif choice == '2':
+        try:
+            num_games = int(input("Enter the number of games to run in parallel: ").strip())
+            if num_games > 0:
+                run_parallel_games(num_games, llm_client)
+            else:
+                print("Please enter a positive integer for the number of games.")
+        except ValueError:
+            print("Invalid input. Please enter a valid integer.")
+    else:
+        print("Invalid choice. Please enter '1' or '2'.")
