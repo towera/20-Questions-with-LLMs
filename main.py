@@ -9,6 +9,8 @@ from client import LLMClient
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(message)s')
+logging.getLogger("requests").setLevel(logging.ERROR)
+logging.getLogger("urllib3.connectionpool").setLevel(logging.ERROR)
 logger = logging.getLogger(__name__)
 # Load environment variables from a .env file if it exists
 load_dotenv()
