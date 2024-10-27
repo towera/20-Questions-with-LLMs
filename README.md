@@ -2,7 +2,7 @@
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/towera/20-Questions-with-LLMs/edit/main/README.md
+   git clone https://github.com/towera/20-Questions-with-LLMs
    cd 20-Questions-with-LLMs
 
 2. **Install Dependencies**:
