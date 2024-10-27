@@ -5,10 +5,7 @@ import logging
 import time
 
 # Set up logging
-logging.basicConfig(level=logging.INFO, format='%(message)s')
-logging.getLogger("openai").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
-
 load_dotenv()
 
 class LLMClient:
