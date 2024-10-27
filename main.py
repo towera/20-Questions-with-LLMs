@@ -9,6 +9,7 @@ from client import LLMClient
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(message)s')
+logging.getLogger("openai").setLevel(logging.WARNING)
 logger = logging.getLogger()
 
 # Load environment variables from a .env file if it exists
