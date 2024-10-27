@@ -4,6 +4,7 @@ from client import LLMClient  # Ensure the path is correct if files are in separ
 
 # Configure logger
 logging.basicConfig(level=logging.INFO, format='%(message)s')
+logging.getLogger("openai").setLevel(logging.WARNING)
 logger = logging.getLogger()
 
 class Guesser:
