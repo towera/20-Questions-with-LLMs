@@ -1,3 +1,7 @@
+import re
+import logging
+from client import LLMClient  # Ensure the path is correct if files are in separate folders
+
 class Guesser:
     """
     The Guesser class formulates yes/no questions to narrow down the topic.
