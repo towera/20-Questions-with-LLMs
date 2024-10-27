@@ -48,7 +48,7 @@ def run_parallel_games(num_games, llm_client):
                     print(f"{key}: {value}")
                 
             except Exception as e:
-                logger.error(f"Game {game_count} encountered an error: {e}")
+                httpx_logger.error(f"Game {game_count} encountered an error: {e}")
 
 #Run Game
 if __name__ == "__main__":
