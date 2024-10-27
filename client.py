@@ -32,7 +32,7 @@ class LLMClient:
             # Calculate and store response time
             response_time = time.time() - start_time
             self.response_times.append(response_time)
-            return response.choices[0].message["content"].strip()
+            return response.choices[0].message.content.strip()
 
         except openai.error.OpenAIError as e:
             # Log detailed error
