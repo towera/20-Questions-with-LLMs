@@ -11,15 +11,22 @@ import http.client
 http.client.HTTPConnection.debuglevel = 0
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(message)s')
-logging.getLogger("requests").setLevel(logging.ERROR)
-logging.getLogger("urllib3.connectionpool").setLevel(logging.ERROR)
+if DEBUG:
+    logging.basicConfig(level=logging.DEBUG, format='%(message)s')
+    logging.getLogger("openai").setLevel(logging.DEBUG)
+    logging.getLogger("urllib3").setLevel(logging.DEBUG)
+else:
+    logging.basicConfig(level=logging.INFO, format='%(message)s')
+    logging.getLogger("openai").setLevel(logging.WARNING)
+    logging.getLogger("urllib3").setLevel(logging.WARNING)
+
+# Example logger for other parts of the app
 logger = logging.getLogger(__name__)
+logger.info("DEBUG mode is %s", "on" if DEBUG else "off")
+
 
 # Load environment variables from a .env file if it exists
 load_dotenv()
-
-DEBUG = os.getenv("DEBUG", "False") == "True"
 
 # Retrieve API key from environment variable
 api_key = os.getenv("OPENAI_API_KEY")
