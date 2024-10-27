@@ -8,22 +8,9 @@ from game import Game  # Ensure Game and LLMClient are in the right path for imp
 from client import LLMClient
 import http.client
 
-http.client.HTTPConnection.debuglevel = 0
-
-# Set up logging to only display custom application logs, suppressing all HTTP logs
-logging.basicConfig(level=logging.INFO, format='%(message)s')
-logger = logging.getLogger(__name__)
-
-# Completely disable urllib3 logging
-import urllib3
-urllib3.disable_warnings()  # Suppresses warnings
-urllib3_logger = logging.getLogger("urllib3")
-urllib3_logger.propagate = False
-urllib3_logger.handlers.clear()
-
-# Disable OpenAI and requests logs
-logging.getLogger("openai").setLevel(logging.ERROR)
-logging.getLogger("requests").setLevel(logging.ERROR)
+# Set up logger specifically for httpx
+httpx_logger = logging.getLogger("httpx")
+httpx_logger.setLevel(logging.WARNING)  # Suppress lower-level logs such as HTTP 200 OK
 
 # Load environment variables from a .env file if it exists
 load_dotenv()
