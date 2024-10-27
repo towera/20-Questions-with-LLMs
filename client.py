@@ -7,10 +7,13 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-# Set up logging for httpx to suppress HTTP 200 logs
-httpx_logger = logging.getLogger("httpx")
-httpx_logger.setLevel(logging.WARNING)
+# Set up general logger
 logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+# Suppress lower-level logs from httpx
+logging.getLogger("httpx").setLevel(logging.WARNING)
+
 
 class LLMClient:
     def __init__(self, model="gpt-4o-mini"):
@@ -40,10 +43,13 @@ class LLMClient:
                 # Calculate and store response time
                 response_time = time.time() - start_time
                 self.response_times.append(response_time)
+
+                # Log successful response
+                logger.info(f"Response received in {response_time:.2f} seconds")
                 
                 return content
         except httpx.HTTPStatusError as e:
-            logger.error(f"HTTP error occurred: {e}")
+            logger.error(f"HTTP error occurred: {e.response.status_code} - {e.response.text}")
             return None
         except Exception as e:
             logger.error(f"Unexpected error: {e}")
