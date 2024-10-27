@@ -19,7 +19,6 @@ class LLMClient:
         
         if not self.api_key:
             raise ValueError("OpenAI API key not found. Set it in the .env file.")
-
     def generate_response(self, prompt):
         start_time = time.time()
         headers = {
@@ -31,16 +30,20 @@ class LLMClient:
             "messages": [{"role": "user", "content": prompt}],
         }
         try:
-            with httpx.Client() as client:
+            # Setting a custom timeout
+            with httpx.Client(timeout=10) as client:  # Adjust timeout as needed
                 response = client.post("https://api.openai.com/v1/chat/completions", json=data, headers=headers)
-                response.raise_for_status()  # Raise an error for non-200 responses
+                response.raise_for_status()
                 content = response.json()["choices"][0]["message"]["content"].strip()
                 
-                # Calculate and store response time
+                # Log response time (set to DEBUG to suppress if needed)
                 response_time = time.time() - start_time
                 self.response_times.append(response_time)
                 
                 return content
+        except httpx.TimeoutException:
+            httpx_logger.error("Request timed out. Skipping this prompt.")
+            return None
         except httpx.HTTPStatusError as e:
             httpx_logger.error(f"HTTP error occurred: {e}")
             return None
