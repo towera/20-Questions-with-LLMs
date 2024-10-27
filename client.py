@@ -26,9 +26,6 @@ class LLMClient:
                     {"role": "user", "content": prompt}
                 ]
             )
-            # Log successful request status
-            logger.info("Request successful. HTTP Status: 200")
-
             # Calculate and store response time
             response_time = time.time() - start_time
             self.response_times.append(response_time)
