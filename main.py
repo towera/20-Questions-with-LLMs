@@ -6,6 +6,9 @@ from dotenv import load_dotenv
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from game import Game  # Ensure Game and LLMClient are in the right path for imports
 from client import LLMClient
+import http.client
+
+http.client.HTTPConnection.debuglevel = 0
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(message)s')
