@@ -9,23 +9,21 @@ from client import LLMClient
 import http.client
 
 http.client.HTTPConnection.debuglevel = 0
-# Fetch DEBUG setting
-DEBUG = os.getenv("DEBUG", "False") == "True"
 
-# Configure logging
-if DEBUG:
-    logging.basicConfig(level=logging.DEBUG, format='%(message)s')
-    logging.getLogger("openai").setLevel(logging.DEBUG)
-    logging.getLogger("urllib3").setLevel(logging.DEBUG)
-else:
-    logging.basicConfig(level=logging.INFO, format='%(message)s')
-    logging.getLogger("openai").setLevel(logging.WARNING)
-    logging.getLogger("urllib3").setLevel(logging.WARNING)
-
-# Example logger for other parts of the app
+# Set up logging to only display custom application logs, suppressing all HTTP logs
+logging.basicConfig(level=logging.INFO, format='%(message)s')
 logger = logging.getLogger(__name__)
-logger.info("DEBUG mode is %s", "on" if DEBUG else "off")
 
+# Completely disable urllib3 logging
+import urllib3
+urllib3.disable_warnings()  # Suppresses warnings
+urllib3_logger = logging.getLogger("urllib3")
+urllib3_logger.propagate = False
+urllib3_logger.handlers.clear()
+
+# Disable OpenAI and requests logs
+logging.getLogger("openai").setLevel(logging.ERROR)
+logging.getLogger("requests").setLevel(logging.ERROR)
 
 # Load environment variables from a .env file if it exists
 load_dotenv()
