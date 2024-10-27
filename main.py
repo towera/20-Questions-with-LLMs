@@ -28,6 +28,7 @@ def run_single_game(llm_client):
     """Runs a single instance of the game and outputs the session log and summary."""
     game = Game(llm_client)
     print("\n--- Starting Single Game ---")
+    print("\n--- Host thinks of a topic ---")
     session_log, summary = game.play()
     
     # Print each question and response as they occur
