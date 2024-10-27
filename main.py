@@ -9,10 +9,6 @@ from client import LLMClient
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(message)s')
-# Explicitly disable all handlers for urllib3
-for handler in logging.root.handlers[:]:
-    if "urllib3" in str(handler):
-        logging.root.removeHandler(handler)
 logger = logging.getLogger(__name__)
 # Load environment variables from a .env file if it exists
 load_dotenv()
