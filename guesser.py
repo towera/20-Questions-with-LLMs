@@ -3,9 +3,8 @@ import logging
 from client import LLMClient  # Ensure the path is correct if files are in separate folders
 
 # Configure logger
-logging.basicConfig(level=logging.INFO, format='%(message)s')
-logging.getLogger("openai").setLevel(logging.WARNING)
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
+
 
 class Guesser:
     """
