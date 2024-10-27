@@ -9,6 +9,8 @@ from client import LLMClient
 import http.client
 
 http.client.HTTPConnection.debuglevel = 0
+# Fetch DEBUG setting
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 # Configure logging
 if DEBUG:
