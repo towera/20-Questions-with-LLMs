@@ -2,6 +2,10 @@ import re
 import logging
 from client import LLMClient  # Ensure the path is correct if files are in separate folders
 
+# Configure logger
+logging.basicConfig(level=logging.INFO, format='%(message)s')
+logger = logging.getLogger()
+
 class Guesser:
     """
     The Guesser class formulates yes/no questions to narrow down the topic.
