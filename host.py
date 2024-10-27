@@ -1,3 +1,6 @@
+import logging
+from client import LLMClient  # Assumes client.py and LLMClient are in the same directory
+
 class Host:
     """
     The Host class selects a topic and manages responses to questions from the Guesser.
