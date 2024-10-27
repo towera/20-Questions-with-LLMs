@@ -1,3 +1,7 @@
+import logging
+from host import Host
+from guesser import Guesser
+
 class Game:
     """
     The Game class manages a single game session, handling the interaction 
