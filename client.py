@@ -9,7 +9,7 @@ class LLMClient:
     LLMClient handles interactions with the OpenAI API, including logging response times 
     for performance tracking. This class uses the model specified during initialization.
     """
-    def __init__(self, model="gpt-4"):
+    def __init__(self, model="gpt-4o-mini"):
         self.model = model
         self.response_times = []
 
