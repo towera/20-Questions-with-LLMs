@@ -15,8 +15,11 @@ logging.basicConfig(level=logging.INFO, format='%(message)s')
 logging.getLogger("requests").setLevel(logging.ERROR)
 logging.getLogger("urllib3.connectionpool").setLevel(logging.ERROR)
 logger = logging.getLogger(__name__)
+
 # Load environment variables from a .env file if it exists
 load_dotenv()
+
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 # Retrieve API key from environment variable
 api_key = os.getenv("OPENAI_API_KEY")
