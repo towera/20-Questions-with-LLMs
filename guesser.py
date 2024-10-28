@@ -1,10 +1,8 @@
 import re
 import logging
-from client import LLMClient  # Ensure the path is correct if files are in separate folders
+from client import LLMClient  
 
 # Configure logger
-logging.getLogger("urllib3").setLevel(logging.ERROR)
-logging.getLogger("openai").setLevel(logging.ERROR)
 logger = logging.getLogger(__name__)
 
 
