@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-# Set up logging for httpx to suppress HTTP 200 logs
+# Set up logging for httpx
 httpx_logger = logging.getLogger("httpx")
 httpx_logger.setLevel(logging.WARNING)
 
@@ -22,7 +22,7 @@ class LLMClient:
             raise ValueError("OpenAI API key not found. Set it in the .env file.")
 
     def generate_response(self, prompt, temperature=None):
-        # Use passed temperature or fall back to the default temperature
+
         temperature = temperature if temperature is not None else self.temperature
         start_time = time.time()
         headers = {
