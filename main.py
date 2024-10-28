@@ -4,15 +4,15 @@ import logging
 import time
 from dotenv import load_dotenv
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from game import Game  # Ensure Game and LLMClient are in the correct path for imports
+from game import Game  
 from client import LLMClient
 import http.client
 
-# Set up logger specifically for httpx
+# Set up logger 
 httpx_logger = logging.getLogger("httpx")
 httpx_logger.setLevel(logging.WARNING)  # Suppress lower-level logs such as HTTP 200 OK
 
-# Load environment variables from a .env file if it exists
+# Load environment variables from a .env file 
 load_dotenv()
 
 # Retrieve API key from environment variable
@@ -26,6 +26,7 @@ openai.api_key = api_key
 
 def run_single_game(llm_client):
     """Runs a single instance of the game, displaying each question and response immediately, and shows summary at the end."""
+   
     game = Game(llm_client)
     question_count = 0
     success = False
@@ -84,6 +85,7 @@ def run_parallel_games(num_games, llm_client):
     Runs multiple game instances in parallel using ThreadPoolExecutor.
     Each game is played independently and outputs a session log and summary.
     """
+    
     with ThreadPoolExecutor(max_workers=num_games) as executor:
         futures = []
         
@@ -118,13 +120,13 @@ if __name__ == "__main__":
         
         if choice == '1':
             run_single_game(llm_client)
-            break  # Exit after running single game
+            break 
         elif choice == '2':
             try:
                 num_games = int(input("Enter the number of games to run in parallel: ").strip())
                 if num_games > 0:
                     run_parallel_games(num_games, llm_client)
-                    break  # Exit after running parallel games
+                    break 
                 else:
                     print("Please enter a positive integer for the number of games.")
             except ValueError:
