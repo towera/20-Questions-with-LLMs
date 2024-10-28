@@ -1,5 +1,5 @@
 import logging
-from client import LLMClient  # Assumes client.py and LLMClient are in the same directory
+from client import LLMClient 
 
 class Host:
     """
@@ -15,11 +15,10 @@ class Host:
         Selects a random topic and retrieves its main characteristics 
         by prompting the LLM.
         """
-        # Higher temperature for topic generation to increase variety
+        
         topic_prompt = "Think of one random living or non-living thing. Only respond with the name of the object or living thing."
         topic = self.llm_client.generate_response(topic_prompt, temperature=0.8) or "unknown"
         
-        # Higher temperature for characteristic generation to add more diverse attributes
         characteristic_prompt = (
             f"You chose '{topic}'. List key characteristics like if it is living, an animal, plant, "
             "edible, fruit, etc. Only provide characteristics in a list format."
@@ -53,4 +52,5 @@ class Host:
   
     def evaluate_guess(self, guess):
         """Evaluates the Guesser's guess against the chosen topic."""
+        
         return "Yes" if self.topic.strip(".").lower() == guess.strip().lower() else "No"
