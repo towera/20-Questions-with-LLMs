@@ -15,7 +15,7 @@ class Game:
         self.wrong_guesses = []
         self.question_count = 0
         self.success = False
-        self.regeneration_count = 0  # Local regeneration counter for this game instance
+        self.regeneration_count = 0 
 
     def play(self):
         """
@@ -37,7 +37,6 @@ class Game:
             if answer is None:  # Skip if no valid answer generated
                 continue
             
-            # Log question and answer
             session_log.append(f"Question {self.question_count}: {question} - Answer: {answer}")
             self.asked_questions.append((question, answer))
             
@@ -55,6 +54,7 @@ class Game:
 
     def final_guesses(self, session_log):
         """Allows the Guesser to make final guesses if the topic isn't identified within 18 questions."""
+        
         session_log.append("Entering final guess phase...")
         for _ in range(2):
             guess = self.guesser.reflect_and_guess(self.asked_questions, self.wrong_guesses)
@@ -67,7 +67,6 @@ class Game:
             else:
                 self.wrong_guesses.append(guess)
 
-        # Record unsuccessful ending if applicable
         if not self.success:
             session_log.append(f"The guesser did not guess the topic correctly. The topic was: {self.host.topic}")
 
